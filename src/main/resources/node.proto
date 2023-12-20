@@ -1,0 +1,8 @@
+syntax = "proto3";
+
+package blockchain.entity.trie;
+option java_outer_classname = "NodeProto";
+
+message TrieNode {
+	repeated bytes item = 1;
+}

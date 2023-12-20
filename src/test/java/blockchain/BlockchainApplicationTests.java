@@ -4,6 +4,8 @@ import blockchain.entity.account.ExternalAccount;
 import blockchain.entity.block.BlockInDataBase;
 import blockchain.entity.block.BlockInMemory;
 import blockchain.entity.transaction.TransferTransaction;
+import blockchain.entity.trie.Serializer;
+import blockchain.entity.trie.Trie;
 import blockchain.mapper.AccountMapper;
 import blockchain.mapper.TransactionMapper;
 import blockchain.service.AccountService;
@@ -140,7 +142,8 @@ class BlockchainApplicationTests {
         log.info("开始获取区块信息！");
         List<BlockInMemory> blocks = getBlockInMemory();
         log.info("获取区块信息完成！");
-        Map<String, ExternalAccount> map = new TreeMap<>();
+        Map<String, ExternalAccount> map = new HashMap<>();
+        //Map<String, ExternalAccount> map = new TreeMap<>();
         List<ExternalAccount> commitList = new ArrayList<>();
         for (int i = 0; i < 500; i++) {
             // log.info("区块" + (i + 1) + "信息");
@@ -174,6 +177,75 @@ class BlockchainApplicationTests {
                 double amount = transaction.amount();
                 String from = transaction.addressFrom(), to = transaction.addressTo();
                 ExternalAccount account1 = map.get(from), account2 = map.get(to);
+                account1.transfer(-amount);
+                account2.transfer(+amount);
+            });
+            long result3 = System.nanoTime() - time1;
+            // log.info("执行时间：" + result3);
+
+            long result4 = 0;
+            if ((i + 1) % 5 == 0) {
+                time1 = System.nanoTime();
+                accountService.updateBatchById(commitList);
+                result4 = System.nanoTime() - time1;
+                // log.info("提交时间：" + result4);
+                commitList.clear();
+            }
+
+            if ((i + 1) % 100 == 0) {
+                // map.clear();
+                System.gc();
+            }
+
+            // System.out.println();
+            log.info("区块" + (i + 1) + "信息： " + result1 + " " + result2 + " " + result3 + " " + result4);
+        }
+    }
+
+    @Test
+    void test() {
+        HashMap<String, ExternalAccount> state = new HashMap<>();
+        Trie<String, Boolean> map = new Trie.TrieBuilder<String, Boolean>()
+                .keySerializer(Serializer.STRING_UTF8)
+                .valueSerializer(Serializer.BOOLEAN)
+                .build();
+        log.info("开始获取区块信息！");
+        List<BlockInMemory> blocks = getBlockInMemory();
+        log.info("获取区块信息完成！");
+        List<ExternalAccount> commitList = new ArrayList<>();
+        for (int i = 0; i < 500; i++) {
+            // log.info("区块" + (i + 1) + "信息");
+            BlockInMemory block = blocks.get(i);
+
+            List<String> searchList = new ArrayList<>();
+
+            long time1 = System.nanoTime();
+            block.list().forEach(transaction -> {
+                String from = transaction.addressFrom(), to = transaction.addressTo();
+                if (!map.get(from)) searchList.add(from);
+                else commitList.add(state.get(from));
+                if (!map.get(to)) searchList.add(to);
+                else commitList.add(state.get(to));
+
+            });
+            long result1 = System.nanoTime() - time1;
+            // log.info("获取未命中的账户时间：" + result1);
+
+            time1 = System.nanoTime();
+            List<ExternalAccount> accounts = accountService.getAccountList(searchList);
+            accounts.forEach(account -> {
+                map.put(account.getAddress(), true);
+                state.put(account.getAddress(), account);
+                commitList.add(account);
+            });
+            long result2 = System.nanoTime() - time1;
+            // log.info("访问外存，并将未命中的账户存储到内存的时间：" + result2);
+
+            time1 = System.nanoTime();
+            block.list().forEach(transaction -> {
+                double amount = transaction.amount();
+                String from = transaction.addressFrom(), to = transaction.addressTo();
+                ExternalAccount account1 = state.get(from), account2 = state.get(to);
                 account1.transfer(-amount);
                 account2.transfer(+amount);
             });
