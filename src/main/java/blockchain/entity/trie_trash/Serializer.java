@@ -1,6 +1,4 @@
-package blockchain.entity.trie;
-
-import blockchain.entity.account.ExternalAccount;
+package blockchain.entity.trie_trash;
 
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;

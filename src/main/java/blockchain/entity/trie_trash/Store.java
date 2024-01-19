@@ -1,4 +1,4 @@
-package blockchain.entity.trie;
+package blockchain.entity.trie_trash;
 
 import java.nio.ByteBuffer;
 

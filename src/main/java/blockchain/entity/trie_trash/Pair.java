@@ -1,11 +1,10 @@
-package blockchain.entity.trie;
+package blockchain.entity.trie_trash;
 
-import java.nio.ByteBuffer;
 import java.util.Collections;
 import java.util.List;
 
-import static blockchain.entity.trie.Common.getNodeType;
-import static blockchain.entity.trie.Common.toByteBuffer;
+import static blockchain.entity.trie_trash.Common.getNodeType;
+import static blockchain.entity.trie_trash.Common.toByteBuffer;
 
 /**
  * Pair of path, TrieNode. Used as a convenience object for level traversaling a root node.

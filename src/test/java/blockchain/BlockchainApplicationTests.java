@@ -4,26 +4,19 @@ import blockchain.entity.account.ExternalAccount;
 import blockchain.entity.block.BlockInDataBase;
 import blockchain.entity.block.BlockInMemory;
 import blockchain.entity.transaction.TransferTransaction;
-import blockchain.entity.trie.Serializer;
-import blockchain.entity.trie.Trie;
-import blockchain.mapper.AccountMapper;
-import blockchain.mapper.TransactionMapper;
+import blockchain.entity.trie_trash.Serializer;
+import blockchain.entity.trie_trash.Trie;
 import blockchain.service.AccountService;
 import blockchain.service.BlockService;
 import blockchain.service.TransactionService;
 import blockchain.util.HashUtils;
 import blockchain.util.TransactionUtils;
 import blockchain.util.TypeTransitionUtils;
-import com.alibaba.fastjson2.JSON;
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.redis.core.StringRedisTemplate;
 
-import java.math.BigDecimal;
 import java.security.SecureRandom;
 import java.util.*;
 

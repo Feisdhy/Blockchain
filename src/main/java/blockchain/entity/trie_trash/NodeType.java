@@ -1,4 +1,4 @@
-package blockchain.entity.trie;
+package blockchain.entity.trie_trash;
 
 public enum NodeType {
 	BLANK(false),

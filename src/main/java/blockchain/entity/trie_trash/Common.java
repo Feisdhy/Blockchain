@@ -1,12 +1,12 @@
-package blockchain.entity.trie;
+package blockchain.entity.trie_trash;
 
 import java.nio.ByteBuffer;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
-import blockchain.entity.trie.NodeProto.TrieNode;
-import blockchain.entity.trie.NodeProto.TrieNode.Builder;
+import blockchain.entity.trie_trash.NodeProto.TrieNode;
+import blockchain.entity.trie_trash.NodeProto.TrieNode.Builder;
 
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
